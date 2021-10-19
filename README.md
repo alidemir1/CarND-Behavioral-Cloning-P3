@@ -2,7 +2,7 @@
 
 [//]: # (Image References)
 
-[image1]: ./pictures/network_image.png "Model Visualization"
+[image1]: ./pictures/network_image "Model Visualization"
 [image2]: ./pictures/project_result.gif "Model Visualization"
 
 
