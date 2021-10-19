@@ -2,6 +2,7 @@ import csv
 from scipy import ndimage
 import numpy as np
 
+# reads the excel file containing image file adresses and steering angles belong to each of those images.
 samples = []
 with open('../../../opt/carnd_p3/data/driving_log.csv') as csvfile:
     reader = csv.reader(csvfile)
@@ -14,7 +15,7 @@ from sklearn.model_selection import train_test_split
 train_samples, validation_samples = train_test_split(samples, test_size=0.2)
 from sklearn.utils import shuffle  
     
-
+# data generator function generates batch size data and yield the data when it is called.
 def data_generator(samples, batch_size=32):
     num_samples = len(samples)
     while 1: # Loop forever so the generator never terminates
@@ -57,7 +58,7 @@ from keras.layers import Flatten, Dense, Lambda, Cropping2D, Activation, Dropout
 from keras.layers.convolutional import Convolution2D
 from keras.layers.pooling import MaxPooling2D
 
-
+# CNN model is used to be navigate vehicle on the track.
 model = Sequential()
 model.add(Lambda(lambda x: (x / 255.0) - 0.5, input_shape = (160, 320, 3)))
 model.add(Cropping2D(cropping=((70,25),(0,0))))
@@ -77,9 +78,13 @@ model.add(Dropout(0.5))
 model.add(Dense(128))
 model.add(Dense(1))
 
+
+# as a loss function mean squared error is used with Adam optimizer
 model.compile(loss='mse', optimizer='adam')
 model.fit_generator(train_generator, steps_per_epoch=np.ceil(len(train_samples)/batch_size),validation_data=validation_generator, validation_steps=np.ceil(len(validation_samples)/batch_size), epochs=5, verbose=1)
 
+
+# lastly network parameters are save to be tested on the track
 model.save('model.h5')
 
 exit()
